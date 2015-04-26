@@ -1,0 +1,10 @@
+*.pyc
+.coverage
+.python-version
+client.cfg
+build
+dist
+luigi_bigquery.egg-info
+docs/_build
+docs/_build_html
+data

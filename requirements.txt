@@ -1,0 +1,4 @@
+BigQuery-Python==1.0.0
+luigi>=1.1.2
+pyyaml==3.11
+pandas>=0.16.0
