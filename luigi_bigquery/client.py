@@ -23,19 +23,22 @@ class ResultProxy(object):
     def _rows(self):
         rows = []
         for row in self.results:
-            rows.append([row[c] for c in self._columns()])
+            rows.append([row[c] if row[c] is not None else '' for c in self._columns()])
         return rows
 
     def to_csv(self, path_or_file):
+        def _write_row(f, values):
+            line = u",".join([v if type(v) is unicode else unicode(str(v), encoding='UTF-8') for v in values]) + u"\n"
+            f.write(line.encode('UTF-8'))
+
         def _to_csv(f):
-            f.write(",".join(self._columns()))
-            f.write("\n")
+            _write_row(f, self._columns())
             for row in self._rows():
-                f.write(",".join([str(c) if c else '' for c in row]) + "\n")
+                _write_row(f, row)
 
         if type(path_or_file) in [str, unicode]:
-            with file(path_or_file, 'w') as f:
-                return _to_csv(f)
+            with open(path_or_file, 'w', encoding='UTF-8') as csv_file:
+                return _to_csv(csv_file)
         else:
             return _to_csv(path_or_file)
 

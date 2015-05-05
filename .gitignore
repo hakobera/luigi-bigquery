@@ -1,5 +1,6 @@
 *.pyc
 .coverage
+.idea
 .python-version
 client.cfg
 build
@@ -8,3 +9,4 @@ luigi_bigquery.egg-info
 docs/_build
 docs/_build_html
 data
+env
