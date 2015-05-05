@@ -23,7 +23,7 @@ class ResultProxy(object):
     def _rows(self):
         rows = []
         for row in self.results:
-            rows.append([row[c] for c in self._columns()])
+            rows.append([row[c] if row[c] is not None else '' for c in self._columns()])
         return rows
 
     def to_csv(self, path_or_file):
