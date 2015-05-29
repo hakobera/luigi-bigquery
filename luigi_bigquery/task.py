@@ -33,7 +33,9 @@ class Query(luigi.Task):
     def run_query(self, query):
         result = self.output()
         client = self.config.get_client()
-        job_id, _results = client.query(self.query())
+
+        logger.info("%s: query: %s", self, query)
+        job_id, _results = client.query(query)
         logger.info("%s: bigquery.job.id: %s", self, job_id)
 
         complete, result_size = client.check_job(job_id)
@@ -56,8 +58,6 @@ class Query(luigi.Task):
         return ResultProxy(Job(client, job_id))
 
     def run(self):
-        if hasattr(self, 'query_file'):
-            self.source = self.query_file
         query = self.load_query(self.source) if self.source else self.query()
         result = self.run_query(query)
         target = self.output()
