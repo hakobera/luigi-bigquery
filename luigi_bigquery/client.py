@@ -1,28 +1,26 @@
 class ResultProxy(object):
-    def __init__(self, job_id, schema, row_count, results):
-        self.id = job_id
-        self.schema = schema
-        self.row_count = row_count
-        self.results = results
+    def __init__(self, job):
+        self.job = job
 
     @property
     def job_id(self):
-        return self.id
+        return self.job.job_id
 
     @property
     def size(self):
-        return self.row_count
+        return self.job.result_size
 
     @property
     def description(self):
-        return enumerate(self.schema)
+        return enumerate(self.job.schema)
 
     def _columns(self):
         return [c['name'] for i, c in self.description]
 
     def _rows(self):
         rows = []
-        for row in self.results:
+        print(self.description)
+        for row in self.job.result:
             rows.append([row[c] if row[c] is not None else '' for c in self._columns()])
         return rows
 
@@ -44,4 +42,4 @@ class ResultProxy(object):
 
     def to_dataframe(self):
         import pandas as pd
-        return pd.DataFrame(self.results, columns=self._columns())
+        return pd.DataFrame(self.job.result, columns=self._columns())
