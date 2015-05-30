@@ -33,6 +33,7 @@ class Query(luigi.Task):
     def run_query(self, query):
         result = self.output()
         client = self.config.get_client()
+        print(client.get_table('master', 'users'))
 
         logger.info("%s: query: %s", self, query)
         job_id, _ = client.query(query)
