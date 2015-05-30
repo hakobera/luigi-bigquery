@@ -5,9 +5,28 @@ import shutil
 import tempfile
 
 class MockClient(object):
-    def __init__(self, tables, jobs):
+    def __init__(self, datasets, tables, jobs):
+        self._datasets = datasets
         self._tables = tables
         self._jobs = jobs
+
+    def create_dataset(self, dataset_id, friendly_name=None, description=None, access=None):
+        dataset_data = _dataset_resource(dataset_id, friendly_name, description, access)
+        self._datasets.append(dataset_data)
+        return dataset_data
+
+    def get_datasets(self):
+        return self._datasets
+
+    def get_table(self, dataset_id, table_id):
+        for table in self._tables:
+            ref = table['tableReference']
+            if ref['datasetId'] == dataset_id and ref['tableId'] == table_id:
+                return table
+        return {}
+
+    def delete_table(self, dataset_id, table_id):
+        pass
 
     def check_job(self, job_id):
         job = self._job(job_id)
@@ -30,8 +49,25 @@ class MockClient(object):
                 return job
         return {}
 
+    def _dataset_resource(self, dataset_id, friendly_name=None, description=None, access=None):
+        data = {
+            "datasetReference": {
+                "datasetId": dataset_id,
+                "projectId": 'test-project-id'
+            }
+        }
+        if friendly_name:
+            data["friendlyName"] = friendly_name
+        if description:
+            data["description"] = description
+        if access:
+            data["access"] = access
+
+        return data
+
 class TestConfig(object):
-    def __init__(self, tables=[], jobs=[]):
+    def __init__(self, datasets=[], tables=[], jobs=[]):
+        self.datasets = datasets
         self.tables = tables
         self._jobs = jobs
         self.tmp_dir = None
@@ -49,4 +85,4 @@ class TestConfig(object):
         return os.path.join(self.tmp_dir, filename)
 
     def get_client(self):
-        return MockClient(tables=self, jobs=self._jobs)
+        return MockClient(datasets=self.datasets, tables=self.tables, jobs=self._jobs)
