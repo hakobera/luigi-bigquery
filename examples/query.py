@@ -6,7 +6,7 @@ class MyQuery(luigi_bigquery.Query):
         return "SELECT count(*) cnt FROM [publicdata:samples.github_nested]"
 
     def output(self):
-        return luigi.LocalTarget('data/MyQuery.csv')
+        return luigi.LocalTarget('MyQuery.csv')
 
     def run(self):
         result = self.run_query(self.query())
