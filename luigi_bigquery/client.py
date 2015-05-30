@@ -19,7 +19,6 @@ class ResultProxy(object):
 
     def _rows(self):
         rows = []
-        print(self.description)
         for row in self.job.result:
             rows.append([row[c] if row[c] is not None else '' for c in self._columns()])
         return rows
