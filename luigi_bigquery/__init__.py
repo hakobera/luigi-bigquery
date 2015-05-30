@@ -12,6 +12,8 @@ __all__ = [
     'ConfigLoader',
     'get_config',
     # task
+    'DatasetTask',
+    'TableTask',
     'Query',
     # targets.result
     'ResultTarget',

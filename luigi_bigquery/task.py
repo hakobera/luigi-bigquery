@@ -2,6 +2,8 @@ from luigi_bigquery.config import get_config
 from luigi_bigquery.client import ResultProxy
 from luigi_bigquery.job import Job
 from luigi_bigquery.targets.result import ResultTarget
+from luigi_bigquery.targets.bq import DatasetTarget
+from luigi_bigquery.targets.bq import TableTarget
 
 import luigi
 import jinja2
@@ -9,6 +11,40 @@ import time
 
 import logging
 logger = logging.getLogger('luigi-interface')
+
+# Dataset
+
+class DatasetTask(luigi.Task):
+    config = get_config()
+    dataset_id = luigi.Parameter()
+
+    def output(self):
+        return DatasetTarget(self.dataset_id)
+
+    def run(self):
+        client = self.config.get_client()
+        logger.debug('%s: creating dataset: %s', self, self.dataset_id)
+        client.create_dateset(self.dataset_id)
+
+# Table
+
+class TableTask(luigi.Task):
+    config = get_config()
+    dataset_id = luigi.Parameter()
+    table_id = luigi.Parameter()
+    schema = luigi.Parameter(is_list=True, default=[], significant=False)
+    empty = luigi.BooleanParameter(default=False, significant=False)
+
+    def requires(self):
+        return DatasetTask(self.dataset_id)
+
+    def output(self):
+        return TableTarget(self.dataset_id, self.table_id, self.schema, empty=self.empty)
+
+    def run(self):
+        client = self.config.get_client()
+        logger.debug('%s: creating table: %s.%s', self, self.datasset_id, self.table_id)
+        client.create_table(self.dataset_id, self.table_id, self.schema)
 
 # Query
 
@@ -33,7 +69,6 @@ class Query(luigi.Task):
     def run_query(self, query):
         result = self.output()
         client = self.config.get_client()
-        print(client.get_table('master', 'users'))
 
         logger.info("%s: query: %s", self, query)
         job_id, _ = client.query(query)
