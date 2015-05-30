@@ -14,6 +14,9 @@ class ResultProxy(object):
     def description(self):
         return enumerate(self.job.schema)
 
+    def __iter__(self):
+        return iter(self._rows())
+
     def _columns(self):
         return [c['name'] for i, c in self.description]
 
@@ -41,4 +44,4 @@ class ResultProxy(object):
 
     def to_dataframe(self):
         import pandas as pd
-        return pd.DataFrame(self.job.result, columns=self._columns())
+        return pd.DataFrame(iter(self), columns=self._columns())
