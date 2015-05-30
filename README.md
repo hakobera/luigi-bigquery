@@ -1,5 +1,7 @@
 # Luigi-BigQuery
 
+[![Build Status](https://travis-ci.org/hakobera/luigi-bigquery.svg?branch=master)](https://travis-ci.org/hakobera/luigi-bigquery)
+
 Luigi integration for Google BigQuery.
 
 **CAUTION: This module is currently under active development.**

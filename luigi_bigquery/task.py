@@ -35,7 +35,7 @@ class Query(luigi.Task):
         client = self.config.get_client()
 
         logger.info("%s: query: %s", self, query)
-        job_id, _results = client.query(query)
+        job_id, _ = client.query(query)
         logger.info("%s: bigquery.job.id: %s", self, job_id)
 
         complete, result_size = client.check_job(job_id)
