@@ -12,7 +12,11 @@ class Config(object):
         self.private_key_file = private_key_file
 
     def get_client(self):
-        return bqclient(self.project_id, service_account=self.service_account, private_key_file=self.private_key_file)
+        return bqclient(
+                self.project_id,
+                service_account=self.service_account,
+                private_key_file=self.private_key_file,
+                readonly=False)
 
 class ConfigLoader(object):
     _instance = None

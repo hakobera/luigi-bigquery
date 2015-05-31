@@ -29,7 +29,7 @@ class TableTarget(luigi.Target):
         client = self.config.get_client()
         table = client.get_table(self.dataset_id, self.table_id)
 
-        if table.get('tableReference') == None:
+        if not bool(table):
             return False
 
         count = table.get('numRows', 0)
@@ -39,7 +39,7 @@ class TableTarget(luigi.Target):
             if count == 0:
                 return True
             else:
-                logger.debug('Deleting table: %s.%s', self.dataset_id, self.table_id)
+                logger.info('Deleting table: %s.%s', self.dataset_id, self.table_id)
                 client.delete_table(self.dataset_id, self.table_id)
                 return False
         else:
