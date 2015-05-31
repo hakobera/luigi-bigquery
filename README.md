@@ -96,6 +96,10 @@ cnt
 2541639
 ```
 
+## For more examples
+
+See [examples/tasks.py](./examples/tasks.py)
+
 ## License
 
 Apache License Version 2.0
