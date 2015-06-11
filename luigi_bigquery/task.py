@@ -137,7 +137,8 @@ class QueryTable(Query):
                 dataset=self.dataset(),
                 table=self.table(),
                 create_disposition=self.create_disposition,
-                write_disposition=self.write_disposition)
+                write_disposition=self.write_disposition,
+                allow_large_results=True)
         job_id = job['jobReference'].get('jobId')
         logger.info("%s: bigquery.job.id: %s", self, job_id)
 
