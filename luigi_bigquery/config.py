@@ -1,6 +1,7 @@
 import os
 import luigi
 from bigquery import get_client as bqclient
+from .gcs import get_gcs_client
 
 import logging
 logger = logging.getLogger('luigi-interface')
@@ -17,6 +18,12 @@ class Config(object):
                 service_account=self.service_account,
                 private_key_file=self.private_key_file,
                 readonly=False)
+
+    def get_gcs_client(self):
+        return get_gcs_client(
+                self.project_id,
+                service_account=self.service_account,
+                private_key_file=self.private_key_file)
 
 class ConfigLoader(object):
     _instance = None

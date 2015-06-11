@@ -332,5 +332,19 @@ class MyQueryTableStep2(luigi_bigquery.Query):
         with self.output().open('w') as f:
             result.to_csv(f)
 
+# QueryToGCS
+
+class MyQueryToGCS(luigi_bigquery.QueryToGCS):
+    use_temporary_table = True
+
+    def bucket(self):
+        return 'my-bucket'
+
+    def path(self):
+        return '/path/to/file.csv'
+
+    def query(self):
+        return "SELECT count(*) cnt FROM [publicdata:samples.github_nested]"
+
 if __name__ == '__main__':
     luigi.run()
