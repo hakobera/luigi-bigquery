@@ -24,6 +24,7 @@ class TableTarget(luigi.Target):
         self.schema = schema or []
         self.empty = empty
         self.config = config or get_config()
+        self.append = append
 
     def exists(self):
         client = self.config.get_client()
