@@ -18,7 +18,7 @@ class DatasetTarget(luigi.Target):
         return self.dataset_id in [ds['datasetReference']['datasetId'] for ds in client.get_datasets()]
 
 class TableTarget(luigi.Target):
-    def __init__(self, dataset_id, table_id, schema=None, empty=False, config=None):
+    def __init__(self, dataset_id, table_id, schema=None, empty=False, config=None, append=False):
         self.dataset_id = dataset_id
         self.table_id = table_id
         self.schema = schema or []
@@ -29,12 +29,11 @@ class TableTarget(luigi.Target):
         client = self.config.get_client()
         table = client.get_table(self.dataset_id, self.table_id)
 
-        if not bool(table):
+        if not bool(table) or self.append:
             return False
 
         count = table.get('numRows', 0)
 
-        # TODO: schema check
         if self.empty:
             if count == 0:
                 return True
