@@ -18,6 +18,9 @@ class MockClient(object):
     def get_datasets(self):
         return self._datasets
 
+    def check_dataset(self, dataset_id):
+        return dataset_id in [ds['datasetReference']['datasetId'] for ds in self.get_datasets()]
+
     def get_table(self, dataset_id, table_id):
         for table in self._tables:
             ref = table['tableReference']
