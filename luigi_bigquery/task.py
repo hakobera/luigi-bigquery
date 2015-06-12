@@ -224,7 +224,7 @@ class QueryToGCS(QueryTable):
     def _cleanup(self):
         if self.use_temporary_table:
             client = self.config.get_client()
-            client.delete_dataset(self._dataset_id, delete_contents=True)
+            client.delete_dataset(self.dataset(), delete_contents=True)
 
     def run(self):
         query = self.load_query(self.source) if self.source else self.query()
