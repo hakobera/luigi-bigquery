@@ -65,10 +65,27 @@ class MockClient(object):
 
         return data
 
+
+class MockGCSClient(object):
+
+    def __init__(self, objects):
+        self._objects = objects
+
+    def get_file(self, bucket_name, path):
+        for obj in self._objects:
+            if obj['bucket'] == bucket_name and obj['name'] == path:
+                return obj
+        return {}
+
+    def check_file(self, bucket_name, path):
+        file = self.get_file(bucket_name, path)
+        return bool(file)
+
 class TestConfig(object):
-    def __init__(self, datasets=[], tables=[], jobs=[]):
+    def __init__(self, datasets=[], tables=[], jobs=[], objects=[]):
         self.datasets = datasets
         self.tables = tables
+        self.objects = objects
         self._jobs = jobs
         self.tmp_dir = None
 
@@ -86,3 +103,6 @@ class TestConfig(object):
 
     def get_client(self):
         return MockClient(datasets=self.datasets, tables=self.tables, jobs=self._jobs)
+
+    def get_gcs_client(self):
+        return MockGCSClient(objects=self.objects)
