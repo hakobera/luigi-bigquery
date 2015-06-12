@@ -15,7 +15,7 @@ class DatasetTarget(luigi.Target):
 
     def exists(self):
         client = self.config.get_client()
-        return self.dataset_id in [ds['datasetReference']['datasetId'] for ds in client.get_datasets()]
+        return client.check_dataset(self.dataset_id)
 
 class TableTarget(luigi.Target):
     def __init__(self, dataset_id, table_id, schema=None, empty=False, config=None, append=False):

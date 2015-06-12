@@ -1,4 +1,4 @@
-BigQuery-Python>=1.1.0
+BigQuery-Python>=1.2.0
 jinja2>=2.7.3
 luigi>=1.1.2
 pyyaml==3.11
