@@ -141,9 +141,6 @@ class QueryTable(Query):
         result = self.output()
         client = self.config.get_client()
 
-        if self.append():
-            self.write_disposition = bigquery.JOB_WRITE_APPEND
-
         logger.info("%s: query: %s", self, query)
         job = client.write_to_table(
                 query,
