@@ -126,13 +126,16 @@ class QueryTable(Query):
         return DatasetTask(self.dataset())
 
     def output(self):
-        return TableTarget(self.dataset(), self.table())
+        return TableTarget(self.dataset(), self.table(), append=self._append())
 
     def dataset(self):
         return NotImplemented()
 
     def table(self):
         return NotImplemented()
+
+    def _append(self):
+        return self.write_disposition == bigquery.JOB_WRITE_APPEND
 
     def save_as_table(self, query):
         result = self.output()
