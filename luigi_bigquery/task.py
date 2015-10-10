@@ -34,6 +34,18 @@ class DatasetTask(luigi.Task):
         logger.info('%s: creating dataset: %s', self, self.dataset_id)
         client.create_dataset(self.dataset_id)
 
+        max_retry = 30
+        retry = 0
+        while True:
+            time.sleep(5.0)
+            if client.check_dataset(self.dataset_id):
+                break
+            retry += 1
+            if retry > max_retry:
+                msg = "DatasetTask(dataset_id={0}) max retry error.".format(self.dataset_id)
+                logger.error(msg)
+                raise Exception(msg)
+
 # Table
 
 class TableTask(luigi.Task):
@@ -176,12 +188,14 @@ class QueryTable(Query):
         self.save_as_table(query)
 
 class QueryToGCS(QueryTable):
-    compression = 'NONE' # or GZIP
-    format = 'CSV' # or NEWLINE_DELIMITED_JSON
-    print_header = True
-    use_temporary_table = False
+    compression = luigi.Parameter(default='NONE') # or GZIP
+    format = luigi.Parameter(default='CSV') # or NEWLINE_DELIMITED_JSON
+    print_header = luigi.Parameter(default=True)
+    use_temporary_table = luigi.Parameter(default=True)
 
-    _random_id = 'tmp_{}'.format(_id_generator())
+    def __init__(self, *args, **kwargs):
+        super(QueryToGCS, self).__init__(*args, **kwargs)
+        self._random_id = 'tmp_{}'.format(_id_generator())
 
     def dataset(self):
         if self.use_temporary_table:
