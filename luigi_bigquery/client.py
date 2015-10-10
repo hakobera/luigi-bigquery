@@ -44,4 +44,9 @@ class ResultProxy(object):
 
     def to_dataframe(self):
         import pandas as pd
-        return pd.DataFrame(iter(self), columns=self._columns())
+        df = pd.DataFrame(columns=self._columns())
+        i = 0
+        for row in self._rows():
+            df.loc[i] = row
+            i += 1
+        return df
