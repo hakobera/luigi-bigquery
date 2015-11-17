@@ -13,6 +13,7 @@ import time
 import bigquery
 import string
 import random
+import six
 
 import logging
 logger = logging.getLogger('luigi-interface')
@@ -125,10 +126,10 @@ class Query(luigi.Task):
             import pandas as pd
             TERMINAL_WIDTH = 120
             pd.options.display.width = TERMINAL_WIDTH
-            print '-' * TERMINAL_WIDTH
-            print 'Query result:'
-            print result.to_dataframe()
-            print '-' * TERMINAL_WIDTH
+            six.print_('-' * TERMINAL_WIDTH)
+            six.print_('Query result:')
+            six.print_(result.to_dataframe())
+            six.print_('-' * TERMINAL_WIDTH)
 
 class QueryTable(Query):
     create_disposition = bigquery.JOB_CREATE_IF_NEEDED
