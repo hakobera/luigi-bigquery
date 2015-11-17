@@ -53,14 +53,14 @@ class TableTask(luigi.Task):
     config = get_config()
     dataset_id = luigi.Parameter()
     table_id = luigi.Parameter()
-    schema = luigi.Parameter(is_list=True, default=[], significant=False)
+    schema = luigi.Parameter(default=[], significant=False)
     empty = luigi.BooleanParameter(default=False, significant=False)
 
     def requires(self):
         return DatasetTask(self.dataset_id)
 
     def output(self):
-        return TableTarget(self.dataset_id, self.table_id, self.schema, empty=self.empty)
+        return TableTarget(self.dataset_id, self.table_id, empty=self.empty)
 
     def run(self):
         client = self.config.get_client()
