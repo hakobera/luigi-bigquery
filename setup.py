@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="luigi-bigquery",
-    version="0.1.0",
+    version="0.2.0",
     descripition="Luigi integration for Google BigQuery",
     author="Kazuyuki Honda",
     author_email="hakobera@gmail.com",

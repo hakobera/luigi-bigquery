@@ -8,8 +8,10 @@ Luigi integration for Google BigQuery.
 
 ## Prerequisities
 
-- Python == 2.7 (Not supported Python >= 3.0)
-- [luigi](https://github.com/spotify/luigi) >= 1.1.2
+- Python == 2.7
+- [luigi](https://github.com/spotify/luigi) >= 2.0.0
+
+If you want to run with luigi 1.x, use [lugi_1](https://github.com/hakobera/luigi-bigquery/tree/luigi_1) branch.
 
 ## Install
 

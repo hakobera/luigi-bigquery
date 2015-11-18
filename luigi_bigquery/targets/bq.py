@@ -18,10 +18,9 @@ class DatasetTarget(luigi.Target):
         return client.check_dataset(self.dataset_id)
 
 class TableTarget(luigi.Target):
-    def __init__(self, dataset_id, table_id, schema=None, empty=False, config=None, append=False):
+    def __init__(self, dataset_id, table_id, empty=False, config=None, append=False):
         self.dataset_id = dataset_id
         self.table_id = table_id
-        self.schema = schema or []
         self.empty = empty
         self.config = config or get_config()
         self.append = append
